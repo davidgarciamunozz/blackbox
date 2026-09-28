@@ -2,9 +2,11 @@
 // Uso: servidor arrancado, luego `npx tsx scripts/smoke.ts [host:puerto]`
 import WebSocket from 'ws';
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { challengesPath } from '../src/challenges.js';
 
 const HOST = process.argv[2] ?? 'localhost:8080';
-const retos = JSON.parse(readFileSync(new URL('../data/retos.json', import.meta.url), 'utf8'));
+const retos = JSON.parse(readFileSync(challengesPath(fileURLToPath(new URL('../data', import.meta.url))), 'utf8'));
 const byId = (id: string) => [...retos.cables, ...retos.simon, ...retos.candados].find((r: any) => r.id === id);
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

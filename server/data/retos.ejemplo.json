@@ -1,0 +1,626 @@
+{
+  "version": "ejemplo",
+  "notas": {
+    "aviso": "Retos inventados SOLO para desarrollo y tests. No coinciden con el manual. Los retos reales van en data/retos.json (no se sube al repo)."
+  },
+  "cables": [
+    {
+      "id": "ej-cables-01",
+      "equipo": "rojo",
+      "type": "cables",
+      "cables": [
+        {
+          "color": "negro",
+          "rune": 3,
+          "number": 9
+        },
+        {
+          "color": "azul",
+          "rune": 4,
+          "number": 6
+        },
+        {
+          "color": "blanco",
+          "rune": 2,
+          "number": 9
+        }
+      ],
+      "solution": 0
+    },
+    {
+      "id": "ej-cables-02",
+      "equipo": "rojo",
+      "type": "cables",
+      "cables": [
+        {
+          "color": "rojo",
+          "rune": 6,
+          "number": 4
+        },
+        {
+          "color": "amarillo",
+          "rune": 3,
+          "number": 5
+        },
+        {
+          "color": "negro",
+          "rune": 16,
+          "number": 6
+        }
+      ],
+      "solution": 2
+    },
+    {
+      "id": "ej-cables-03",
+      "equipo": "rojo",
+      "type": "cables",
+      "cables": [
+        {
+          "color": "negro",
+          "rune": 13,
+          "number": 7
+        },
+        {
+          "color": "naranja",
+          "rune": 16,
+          "number": 2
+        },
+        {
+          "color": "amarillo",
+          "rune": 6,
+          "number": 8
+        }
+      ],
+      "solution": 1
+    },
+    {
+      "id": "ej-cables-04",
+      "equipo": "naranja",
+      "type": "cables",
+      "cables": [
+        {
+          "color": "azul",
+          "rune": 4,
+          "number": 6
+        },
+        {
+          "color": "negro",
+          "rune": 2,
+          "number": 2
+        }
+      ],
+      "solution": 0
+    },
+    {
+      "id": "ej-cables-05",
+      "equipo": "naranja",
+      "type": "cables",
+      "cables": [
+        {
+          "color": "amarillo",
+          "rune": 11,
+          "number": 4
+        },
+        {
+          "color": "negro",
+          "rune": 7,
+          "number": 4
+        },
+        {
+          "color": "verde",
+          "rune": 13,
+          "number": 4
+        }
+      ],
+      "solution": 0
+    },
+    {
+      "id": "ej-cables-06",
+      "equipo": "naranja",
+      "type": "cables",
+      "cables": [
+        {
+          "color": "negro",
+          "rune": 5,
+          "number": 8
+        },
+        {
+          "color": "blanco",
+          "rune": 5,
+          "number": 8
+        }
+      ],
+      "solution": 1
+    }
+  ],
+  "simon": [
+    {
+      "id": "ej-simon-01",
+      "equipo": "rojo",
+      "type": "simon",
+      "turns": [
+        {
+          "leds": [
+            "rojo"
+          ],
+          "pattern": [
+            "verde",
+            "verde",
+            "rojo",
+            "azul"
+          ],
+          "solution": [
+            "rojo",
+            "verde",
+            "rojo",
+            "rojo"
+          ]
+        },
+        {
+          "leds": [
+            "rojo"
+          ],
+          "pattern": [
+            "verde",
+            "rojo",
+            "azul",
+            "rojo"
+          ],
+          "solution": [
+            "azul",
+            "amarillo",
+            "verde",
+            "azul"
+          ]
+        },
+        {
+          "leds": [
+            "rojo",
+            "amarillo",
+            "azul"
+          ],
+          "pattern": [
+            "azul",
+            "rojo",
+            "azul",
+            "amarillo"
+          ],
+          "solution": [
+            "rojo",
+            "rojo",
+            "rojo",
+            "azul"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ej-simon-02",
+      "equipo": "rojo",
+      "type": "simon",
+      "turns": [
+        {
+          "leds": [
+            "amarillo",
+            "verde"
+          ],
+          "pattern": [
+            "rojo",
+            "rojo",
+            "verde",
+            "azul"
+          ],
+          "solution": [
+            "amarillo",
+            "azul",
+            "verde",
+            "verde"
+          ]
+        },
+        {
+          "leds": [
+            "rojo"
+          ],
+          "pattern": [
+            "amarillo",
+            "amarillo",
+            "amarillo",
+            "verde"
+          ],
+          "solution": [
+            "verde",
+            "rojo",
+            "rojo",
+            "amarillo"
+          ]
+        },
+        {
+          "leds": [
+            "rojo",
+            "verde"
+          ],
+          "pattern": [
+            "amarillo",
+            "verde",
+            "amarillo",
+            "verde"
+          ],
+          "solution": [
+            "amarillo",
+            "rojo",
+            "verde",
+            "amarillo"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ej-simon-03",
+      "equipo": "rojo",
+      "type": "simon",
+      "turns": [
+        {
+          "leds": [
+            "amarillo",
+            "rojo",
+            "azul"
+          ],
+          "pattern": [
+            "amarillo",
+            "verde",
+            "amarillo",
+            "verde"
+          ],
+          "solution": [
+            "azul",
+            "azul",
+            "rojo",
+            "azul"
+          ]
+        },
+        {
+          "leds": [
+            "azul"
+          ],
+          "pattern": [
+            "azul",
+            "rojo",
+            "verde",
+            "azul"
+          ],
+          "solution": [
+            "amarillo",
+            "amarillo",
+            "rojo",
+            "azul"
+          ]
+        },
+        {
+          "leds": [
+            "amarillo",
+            "verde"
+          ],
+          "pattern": [
+            "amarillo",
+            "azul",
+            "rojo",
+            "verde"
+          ],
+          "solution": [
+            "verde",
+            "verde",
+            "verde",
+            "verde"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ej-simon-04",
+      "equipo": "naranja",
+      "type": "simon",
+      "turns": [
+        {
+          "leds": [
+            "azul",
+            "amarillo",
+            "rojo"
+          ],
+          "pattern": [
+            "amarillo",
+            "rojo",
+            "rojo",
+            "azul"
+          ],
+          "solution": [
+            "verde",
+            "azul",
+            "amarillo",
+            "amarillo"
+          ]
+        },
+        {
+          "leds": [
+            "amarillo",
+            "azul",
+            "rojo"
+          ],
+          "pattern": [
+            "rojo",
+            "verde",
+            "verde",
+            "verde"
+          ],
+          "solution": [
+            "verde",
+            "amarillo",
+            "rojo",
+            "azul"
+          ]
+        },
+        {
+          "leds": [
+            "amarillo"
+          ],
+          "pattern": [
+            "amarillo",
+            "verde",
+            "azul",
+            "rojo"
+          ],
+          "solution": [
+            "azul",
+            "amarillo",
+            "azul",
+            "rojo"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ej-simon-05",
+      "equipo": "naranja",
+      "type": "simon",
+      "turns": [
+        {
+          "leds": [
+            "verde",
+            "azul",
+            "rojo"
+          ],
+          "pattern": [
+            "rojo",
+            "amarillo",
+            "verde",
+            "amarillo"
+          ],
+          "solution": [
+            "azul",
+            "amarillo",
+            "verde",
+            "amarillo"
+          ]
+        },
+        {
+          "leds": [
+            "rojo",
+            "verde"
+          ],
+          "pattern": [
+            "rojo",
+            "azul",
+            "verde",
+            "azul"
+          ],
+          "solution": [
+            "amarillo",
+            "azul",
+            "verde",
+            "rojo"
+          ]
+        },
+        {
+          "leds": [
+            "amarillo",
+            "verde"
+          ],
+          "pattern": [
+            "rojo",
+            "rojo",
+            "verde",
+            "azul"
+          ],
+          "solution": [
+            "verde",
+            "azul",
+            "verde",
+            "amarillo"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ej-simon-06",
+      "equipo": "naranja",
+      "type": "simon",
+      "turns": [
+        {
+          "leds": [
+            "azul"
+          ],
+          "pattern": [
+            "rojo",
+            "rojo",
+            "rojo",
+            "azul"
+          ],
+          "solution": [
+            "verde",
+            "azul",
+            "azul",
+            "rojo"
+          ]
+        },
+        {
+          "leds": [
+            "azul",
+            "verde"
+          ],
+          "pattern": [
+            "azul",
+            "amarillo",
+            "amarillo",
+            "verde"
+          ],
+          "solution": [
+            "azul",
+            "rojo",
+            "amarillo",
+            "verde"
+          ]
+        },
+        {
+          "leds": [
+            "verde",
+            "amarillo",
+            "rojo"
+          ],
+          "pattern": [
+            "azul",
+            "rojo",
+            "verde",
+            "azul"
+          ],
+          "solution": [
+            "rojo",
+            "azul",
+            "azul",
+            "azul"
+          ]
+        }
+      ]
+    }
+  ],
+  "candados": [
+    {
+      "id": "ej-candados-01",
+      "equipo": "rojo",
+      "type": "candados",
+      "headerRune": 16,
+      "pads": [
+        {
+          "solution": 8,
+          "revealRune": 14
+        },
+        {
+          "solution": 5,
+          "revealRune": 15
+        },
+        {
+          "solution": 9,
+          "revealRune": null
+        }
+      ]
+    },
+    {
+      "id": "ej-candados-02",
+      "equipo": "rojo",
+      "type": "candados",
+      "headerRune": 6,
+      "pads": [
+        {
+          "solution": 9,
+          "revealRune": 4
+        },
+        {
+          "solution": 7,
+          "revealRune": 2
+        },
+        {
+          "solution": 3,
+          "revealRune": null
+        }
+      ]
+    },
+    {
+      "id": "ej-candados-03",
+      "equipo": "rojo",
+      "type": "candados",
+      "headerRune": 4,
+      "pads": [
+        {
+          "solution": 7,
+          "revealRune": 13
+        },
+        {
+          "solution": 0,
+          "revealRune": 7
+        },
+        {
+          "solution": 1,
+          "revealRune": null
+        }
+      ]
+    },
+    {
+      "id": "ej-candados-04",
+      "equipo": "naranja",
+      "type": "candados",
+      "headerRune": 10,
+      "pads": [
+        {
+          "solution": 1,
+          "revealRune": 9
+        },
+        {
+          "solution": 8,
+          "revealRune": 12
+        },
+        {
+          "solution": 2,
+          "revealRune": null
+        }
+      ]
+    },
+    {
+      "id": "ej-candados-05",
+      "equipo": "naranja",
+      "type": "candados",
+      "headerRune": 3,
+      "pads": [
+        {
+          "solution": 6,
+          "revealRune": 15
+        },
+        {
+          "solution": 6,
+          "revealRune": 3
+        },
+        {
+          "solution": 2,
+          "revealRune": null
+        }
+      ]
+    },
+    {
+      "id": "ej-candados-06",
+      "equipo": "naranja",
+      "type": "candados",
+      "headerRune": 16,
+      "pads": [
+        {
+          "solution": 9,
+          "revealRune": 4
+        },
+        {
+          "solution": 8,
+          "revealRune": 2
+        },
+        {
+          "solution": 5,
+          "revealRune": null
+        }
+      ]
+    }
+  ]
+}

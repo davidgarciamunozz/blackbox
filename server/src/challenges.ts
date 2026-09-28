@@ -1,4 +1,5 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import type { CableColor, PublicChallenge, SimonColor, Team } from '../../shared/protocol.js';
 export type { CableColor, PublicChallenge, SimonColor };
 
@@ -36,6 +37,15 @@ export interface ChallengeFile {
 
 export function loadChallenges(path: string): ChallengeFile {
   return JSON.parse(readFileSync(path, 'utf8'));
+}
+
+// Los retos reales (con soluciones) no están en el repo: se copian a data/retos.json.
+// Sin ellos se usan los de ejemplo, que sirven para desarrollar pero no coinciden con el manual.
+export function challengesPath(dataDir: string): string {
+  const real = join(dataDir, 'retos.json');
+  if (existsSync(real)) return real;
+  console.warn('⚠ No existe data/retos.json: usando retos.ejemplo.json (no coinciden con el manual).');
+  return join(dataDir, 'retos.ejemplo.json');
 }
 
 // ---------------------------------------------------------------------------

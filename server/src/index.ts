@@ -11,7 +11,7 @@ import { dirname, extname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { WebSocketServer, type WebSocket } from 'ws';
 import { config, TEAMS, type Team } from './config.js';
-import { ChallengePicker, loadChallenges } from './challenges.js';
+import { ChallengePicker, challengesPath, loadChallenges } from './challenges.js';
 import { Game, type Bus } from './game.js';
 import { MatchLog } from './log.js';
 import type { ClientMessage, DeviceMessage, ServerMessage, ToDeviceMessage } from './protocol.js';
@@ -48,7 +48,7 @@ const bus: Bus = {
   },
 };
 
-const challenges = loadChallenges(join(DATA_DIR, 'retos.json'));
+const challenges = loadChallenges(challengesPath(DATA_DIR));
 const game = new Game(config, new ChallengePicker(challenges), bus, undefined, log);
 setInterval(() => game.tick(), 100);
 

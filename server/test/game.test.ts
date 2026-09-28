@@ -6,7 +6,8 @@ import { Game, type Bus } from '../src/game.js';
 import { MatchLog } from '../src/log.js';
 import type { ServerMessage, ToDeviceMessage } from '../src/protocol.js';
 
-const file = loadChallenges(join(__dirname, '../data/retos.json'));
+// Siempre los retos de ejemplo: los reales no están en el repo.
+const file = loadChallenges(join(__dirname, '../data/retos.ejemplo.json'));
 
 function setup() {
   let now = 1_000_000;
@@ -44,7 +45,7 @@ function startMatch(t: ReturnType<typeof setup>) {
   t.advance(config.countdown * 1000);
 }
 
-// Soluciones de los primeros retos del equipo rojo en retos.json
+// Soluciones de los primeros retos del equipo rojo
 const ROJO = {
   cables: file.cables.find((c) => c.equipo === 'rojo')!,
   simon: file.simon.find((c) => c.equipo === 'rojo')!,

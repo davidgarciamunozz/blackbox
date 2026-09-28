@@ -9,6 +9,12 @@ shared/   Tipos del protocolo, compartidos por los dos.
 CONTRATO.md  Todos los mensajes entre móvil, servidor y caja.
 ```
 
+## Retos
+
+Los retos reales llevan las soluciones, así que **no están en el repo**. Hay que copiar `retos.json` a
+`server/data/retos.json` (está en `.gitignore`). Sin ese archivo el servidor usa `retos.ejemplo.json`: retos
+inventados que sirven para desarrollar y para los tests, pero que no coinciden con el manual.
+
 ## Arrancar
 
 ```bash
