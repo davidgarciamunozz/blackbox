@@ -15,42 +15,38 @@ const CABLE_HEX: Record<CableColor, string> = {
   naranja: '#f08c2e',
 };
 
-// Qué cable se cortó para resolver cada reto (para dibujarlo cortado al volver al módulo).
-const cutByChallenge = new Map<string, number>();
-
 export function Cables({
   challenge,
+  cut,
   solved,
   errorAt,
   onCut,
 }: {
   challenge: CablesChallenge;
+  cut: number[]; // cables ya cortados (el servidor los recuerda, también los fallados)
   solved: boolean;
   errorAt: number | null;
   onCut: (index: number) => void;
 }) {
-  const cut = solved ? cutByChallenge.get(challenge.id) ?? null : null;
-
   return (
-    <ModuleCasing challengeId={challenge.id} name="Cables" hint={solved ? 'Resuelto' : 'Corta uno · un toque responde'} shake={errorAt}>
+    <ModuleCasing challengeId={challenge.id} solved={solved} name="Cables" hint={solved ? 'Resuelto' : 'Corta uno · un toque responde'} shake={errorAt}>
       <div className={`dither dither-cavidad ${s.cavity}`}>
-        {challenge.cables.map((cable, i) => (
+        {challenge.cables.map((cable, i) => {
+          const isCut = cut.includes(i);
+          return (
           <button
             key={i}
             type="button"
-            className={`dither dither-panel ${s.cable} ${cut === i ? s.cableCut : ''}`}
-            disabled={solved}
-            onClick={() => {
-              cutByChallenge.set(challenge.id, i);
-              onCut(i);
-            }}
-            aria-label={`Cortar cable ${cable.color}, número ${cable.number}`}
+            className={`dither dither-panel ${s.cable} ${isCut ? s.cableCut : ''}`}
+            disabled={solved || isCut}
+            onClick={() => onCut(i)}
+            aria-label={isCut ? `Cable ${cable.color} cortado` : `Cortar cable ${cable.color}, número ${cable.number}`}
           >
             <Rune id={cable.rune} size={60} fontSize={26} />
             <span className={s.wire}>
               <span className={s.wireLabel}>{cable.color}</span>
               <span className={s.terminal} />
-              {cut === i ? (
+              {isCut ? (
                 <span className={s.barCut}>
                   <span style={{ background: CABLE_HEX[cable.color] }} />
                   <span style={{ background: CABLE_HEX[cable.color] }} />
@@ -64,7 +60,8 @@ export function Cables({
               <span className={glowClass}>{cable.number}</span>
             </Lcd>
           </button>
-        ))}
+          );
+        })}
       </div>
     </ModuleCasing>
   );

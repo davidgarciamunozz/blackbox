@@ -53,7 +53,7 @@ export function Simon({
   }
 
   return (
-    <ModuleCasing challengeId={challenge.id}
+    <ModuleCasing challengeId={challenge.id} solved={solved}
       bronze
       name="Simon"
       hint={solved ? 'Resuelto' : `Turno ${turn + 1} de ${challenge.turns.length}`}

@@ -37,7 +37,7 @@ Los tipos exactos están en `shared/protocol.ts` (los usan servidor y app). Todo
 { "type": "timer", "timeLeft": 87 }
 { "type": "module_switch", "active": 1 }
 { "type": "answer_result", "module": 2, "correct": true, "penalty": 0, "timeLeft": 82,
-  "progress": { "simonTurn": 0, "padIndex": 1, "revealed": [7], "padValues": [4] }, "reveal": 7 }  // reveal solo en candados
+  "progress": { "simonTurn": 0, "padIndex": 1, "revealed": [7], "padValues": [4], "cut": [] }, "reveal": 7 }  // reveal solo en candados
 { "type": "deliver_result", "accepted": false, "solved": [true, false, true] }  // entrega incompleta (pantalla «Entrega rechazada»)
 { "type": "module_solved", "module": 1, "bonus": 10, "timeLeft": 92 }
 { "type": "round_end", "team": "rojo", "result": "defused" | "timeout" | "beaten", "timeLeft": 14 }
@@ -67,11 +67,11 @@ Retos que recibe el móvil (sin soluciones):
 
 ## Reglas del servidor (valores en `server/src/config.ts`)
 
-- Cuenta atrás de 3 s antes de que arranque el reloj. 120 s iniciales por equipo, +10 s por módulo resuelto.
-- Penalización por error (1.º / 2.º / 3.º y siguientes errores del equipo en la ronda): cables 3/5/8, simon 4/6/10, candados 6/10/15 s. **Provisional, pendiente de P.L.**
-- Fallo en Simon: se repite el turno. Fallo en Candados: se queda en el mismo candado. Fallo en Cables: solo penaliza. **Provisional.**
-- Solo se aceptan respuestas al módulo activo. Se puede cambiar a un módulo ya resuelto.
+- Cuenta atrás de 3 s antes de que arranque el reloj. 300 s (5 min) iniciales por equipo, +10 s por módulo resuelto.
+- Penalización por error: base Cables 40 s, Simon 20 s, Candados 10 s, +5 s por cada error previo del equipo en la ronda.
+- Fallo en Cables: el cable fallado queda cortado y se sigue con los demás. Fallo en Simon: se repite el turno. Fallo en Candados: se queda en el mismo candado.
+- Solo se aceptan respuestas al módulo activo. Se puede cambiar a un módulo ya resuelto: el móvil lo muestra bloqueado con el aviso «Módulo resuelto».
 - La entrega con los 3 módulos resueltos desarma la bomba. Incompleta: no pasa nada.
 - El primer equipo que desarma gana la ronda y el rival pasa a `beaten`. Si un equipo cae por tiempo, el otro sigue jugando.
 - Sesión de 3 rondas. Los retos no se repiten dentro de una sesión.
-- LEDs en el lobby: apagados. **Provisional.**
+- LEDs en el lobby: encendidos.

@@ -8,9 +8,11 @@ export function ModuleCasing({
   bronze,
   shake,
   challengeId,
+  solved,
   children,
 }: {
   challengeId: string;
+  solved?: boolean;
   name: string;
   hint: string;
   bronze?: boolean;
@@ -25,6 +27,15 @@ export function ModuleCasing({
         <span className={s.hint}>{hint}</span>
       </header>
       {children}
+      {solved && (
+        // Módulo ya resuelto: se ve, pero no se puede tocar (evita penalizaciones accidentales).
+        <div className={s.solvedOverlay} role="status">
+          <div className={s.solvedStamp}>
+            <span className={s.solvedTitle}>Módulo resuelto</span>
+            <span className={s.solvedHint}>Cambiá de módulo con los botones de la caja</span>
+          </div>
+        </div>
+      )}
     </Casing>
   );
 }

@@ -68,7 +68,7 @@ describe('lobby', () => {
     expect(t.game.phase).toBe('lobby');
     t.game.setReady('B', true);
     expect(t.game.phase).toBe('playing');
-    expect(t.last('match_start', 'rojo').timeLeft).toBe(120);
+    expect(t.last('match_start', 'rojo').timeLeft).toBe(300);
   });
 
   it('no deja ocupar un bando con otro móvil conectado, pero sí uno desconectado', () => {
@@ -100,21 +100,27 @@ describe('ronda', () => {
 
   it('el reloj baja y emite timer cada segundo', () => {
     t.advance(1000);
-    expect(t.last('timer', 'rojo').timeLeft).toBe(119);
+    expect(t.last('timer', 'rojo').timeLeft).toBe(299);
   });
 
-  it('error en cables penaliza y escala por reincidencia', () => {
+  it('error en cables penaliza 40 s, el cable queda cortado y la reincidencia suma 5 s', () => {
     const wrong = ROJO.cables.solution === 0 ? 1 : 0;
     t.game.submit('A', 0, wrong);
-    expect(t.last('answer_result', 'rojo')).toMatchObject({ correct: false, penalty: 3, timeLeft: 117 });
-    t.game.submit('A', 0, wrong);
-    expect(t.last('answer_result', 'rojo').penalty).toBe(5);
+    expect(t.last('answer_result', 'rojo')).toMatchObject({ correct: false, penalty: 40, timeLeft: 260 });
+    expect(t.last('answer_result', 'rojo').progress.cut).toEqual([wrong]);
     expect(t.device.at(-1)).toEqual({ type: 'flash', team: 'rojo' });
+    // volver a tocar el mismo cable no hace nada
+    expect(t.game.submit('A', 0, wrong)).toBe('invalid_answer');
+    expect(t.game.teams.rojo!.errors.length).toBe(1);
+    // segundo error del equipo (en otro módulo): base de Simon 20 + 5
+    t.game.deviceButton('rojo', 1);
+    t.game.submit('A', 1, ['rojo', 'rojo', 'rojo', 'rojo'].map((c, i) => (ROJO.simon.turns[0].solution[i] === c ? 'azul' : c)));
+    expect(t.last('answer_result', 'rojo').penalty).toBe(25);
   });
 
   it('acertar un módulo suma 10 s y apaga su LED', () => {
     t.game.submit('A', 0, ROJO.cables.solution);
-    expect(t.last('module_solved', 'rojo')).toMatchObject({ module: 0, bonus: 10, timeLeft: 130 });
+    expect(t.last('module_solved', 'rojo')).toMatchObject({ module: 0, bonus: 10, timeLeft: 310 });
     expect(t.game.indicators().rojo).toEqual([0, 1, 1]);
   });
 
@@ -156,16 +162,17 @@ describe('ronda', () => {
   });
 
   it('un equipo pierde por tiempo y el otro sigue jugando', () => {
-    // naranja se queda sin tiempo a base de errores
-    const wrong = file.cables.find((c) => c.equipo === 'naranja')!.solution === 0 ? 1 : 0;
-    for (let i = 0; i < 20 && t.game.teams.naranja!.status === 'playing'; i++) t.game.submit('B', 0, wrong);
+    // naranja se queda sin tiempo a base de errores en Candados
+    t.game.deviceButton('naranja', 2);
+    const pad0 = file.candados.find((c) => c.equipo === 'naranja')!.pads[0].solution;
+    for (let i = 0; i < 40 && t.game.teams.naranja!.status === 'playing'; i++) t.game.submit('B', 2, (pad0 + 1) % 10);
     expect(t.game.teams.naranja!.status).toBe('timeout');
     expect(t.game.teams.rojo!.status).toBe('playing');
     expect(t.game.phase).toBe('playing');
   });
 
   it('el reloj a cero es derrota', () => {
-    t.advance(120_000);
+    t.advance(300_000);
     expect(t.game.teams.rojo!.status).toBe('timeout');
     expect(t.game.phase).toBe('round_over');
     expect(t.game.lastRound!.winner).toBeNull();
@@ -201,7 +208,7 @@ describe('cuenta atrás', () => {
     expect(t.last('match_start', 'rojo').countdown).toBe(3);
     t.advance(2000);
     expect(t.game.submit('A', 0, ROJO.cables.solution)).toBe('not_playing');
-    expect(t.game.timeLeft('rojo')).toBe(120);
+    expect(t.game.timeLeft('rojo')).toBe(300);
     t.advance(1000);
     expect(t.game.submit('A', 0, ROJO.cables.solution)).toBeNull();
   });
@@ -215,6 +222,13 @@ describe('cuenta atrás', () => {
   });
 });
 
+describe('LEDs', () => {
+  it('en el lobby están encendidos', () => {
+    const t = setup();
+    expect(t.game.indicators()).toEqual({ rojo: [1, 1, 1], naranja: [1, 1, 1] });
+  });
+});
+
 describe('sesión', () => {
   it('tras 3 rondas la sesión termina y la siguiente arranca de cero', () => {
     const t = setup();
@@ -223,7 +237,7 @@ describe('sesión', () => {
     for (let r = 0; r < 3; r++) {
       t.game.setReady('A', true);
       t.game.setReady('B', true);
-      t.advance(200_000);
+      t.advance(400_000);
     }
     expect(t.game.phase).toBe('session_over');
     t.game.setReady('A', true);
@@ -244,7 +258,7 @@ describe('sesión', () => {
         expect(seen.has(c.id)).toBe(false);
         seen.add(c.id);
       }
-      t.advance(200_000);
+      t.advance(400_000);
     }
   });
 });

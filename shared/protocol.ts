@@ -47,6 +47,7 @@ export interface ProgressView {
   padIndex: number; // 0..3, candados abiertos
   revealed: (number | null)[]; // runas reveladas por cada candado abierto
   padValues: number[]; // números ya fijados en los candados abiertos
+  cut: number[]; // cables cortados (el fallado también queda cortado)
 }
 
 export interface TeamRoundView {

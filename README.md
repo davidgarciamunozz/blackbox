@@ -14,7 +14,7 @@ CONTRATO.md  Todos los mensajes entre móvil, servidor y caja.
 ```bash
 npm install
 npm run build      # compila la app web
-npm start          # servidor en el puerto 8080: sirve la app, /ws (móviles) y /device (caja)
+npm start          # servidor en el puerto 8080 (PORT=8090 npm start si el 8080 está ocupado): sirve la app, /ws (móviles) y /device (caja)
 ```
 
 Al arrancar, el servidor imprime la IP a la que tienen que apuntar los móviles (y `WS_HOST` del firmware).
@@ -41,7 +41,6 @@ Cada ronda se guarda en `server/data/logs/<fecha>/rondas.csv` y `eventos.csv`, y
 
 ## Pendiente
 
-- Valores de penalización, qué pasa al fallar en cada módulo y LEDs del lobby: provisionales en `server/src/config.ts`.
 - Runas: la app muestra el número como marcador. Cuando I.C entregue `rune-01.svg … rune-16.svg`, se copian a
   `web/src/assets/runes/` y se usan solas.
 - Logotipo de la pantalla de inicio.

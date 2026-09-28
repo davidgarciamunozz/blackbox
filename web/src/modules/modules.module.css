@@ -497,3 +497,45 @@
     width: 64px;
   }
 }
+
+/* ---- Módulo ya resuelto ---- */
+.solvedOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  border-radius: 5px;
+  background: rgba(20, 20, 28, 0.55);
+}
+
+.solvedStamp {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 22px;
+  background: var(--lcd);
+  border: 3px solid var(--ok);
+  border-radius: 6px;
+  box-shadow: 0 6px 0 var(--contorno), 0 0 24px rgba(58, 251, 10, 0.35);
+  text-align: center;
+}
+
+.solvedTitle {
+  font-family: var(--f-lcd);
+  font-size: 38px;
+  line-height: 1;
+  color: var(--ok);
+  text-shadow: 0 0 10px rgba(58, 251, 10, 0.6);
+}
+
+.solvedHint {
+  font-family: var(--f-etiqueta);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: var(--etiqueta-carcasa);
+  text-transform: uppercase;
+}

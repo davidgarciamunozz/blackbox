@@ -28,7 +28,7 @@ export function Candados({
   const step = (d: number) => setValue((v) => (v + d + 10) % 10);
 
   return (
-    <ModuleCasing challengeId={challenge.id} name="Candados" hint={solved ? 'Resuelto' : 'De arriba abajo · orden estricto'} shake={errorAt}>
+    <ModuleCasing challengeId={challenge.id} solved={solved} name="Candados" hint={solved ? 'Resuelto' : 'De arriba abajo · orden estricto'} shake={errorAt}>
       <div className={`dither dither-cavidad ${s.headerRune}`}>
         <Rune id={challenge.headerRune} size={78} fontSize={34} />
         <div>

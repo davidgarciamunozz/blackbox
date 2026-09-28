@@ -50,6 +50,7 @@ interface TeamRound {
   padIndex: number;
   revealed: (number | null)[];
   padValues: number[];
+  cut: number[];
   lastSentSecond: number;
 }
 
@@ -192,6 +193,7 @@ export class Game {
         padIndex: 0,
         revealed: [],
         padValues: [],
+        cut: [],
         lastSentSecond: this.cfg.startTime,
       };
     }
@@ -390,6 +392,9 @@ export class Game {
   private checkCables(tr: TeamRound, answer: unknown) {
     const c = tr.challenges[0];
     if (!Number.isInteger(answer) || (answer as number) < 0 || (answer as number) >= c.cables.length) return null;
+    // Un cable ya cortado no se puede volver a cortar (ni penaliza).
+    if (tr.cut.includes(answer as number)) return null;
+    tr.cut.push(answer as number);
     const correct = answer === c.solution;
     return { correct, solved: correct };
   }
@@ -433,8 +438,7 @@ export class Game {
   }
 
   penaltyFor(module: ModuleIndex, errorNumber: number): number {
-    const table = this.cfg.penalties[MODULES[module] as ModuleType];
-    return table[Math.min(errorNumber, table.length) - 1];
+    return this.cfg.penaltyBase[MODULES[module] as ModuleType] + this.cfg.penaltyStep * (errorNumber - 1);
   }
 
   private applyError(team: Team, tr: TeamRound, module: ModuleIndex) {
@@ -457,7 +461,7 @@ export class Game {
   }
 
   private progress(tr: TeamRound): ProgressView {
-    return { simonTurn: tr.simonTurn, padIndex: tr.padIndex, revealed: [...tr.revealed], padValues: [...tr.padValues] };
+    return { simonTurn: tr.simonTurn, padIndex: tr.padIndex, revealed: [...tr.revealed], padValues: [...tr.padValues], cut: [...tr.cut] };
   }
 
   // =========================================================================

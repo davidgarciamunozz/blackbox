@@ -115,7 +115,7 @@ export function Juego({ state, team, mine, fx }: { state: StateSnapshot; team: T
   const challenge = mine.challenges[active];
   let module = null;
   if (challenge.type === 'cables') {
-    module = <Cables challenge={challenge} solved={mine.solved[0]} errorAt={errorAt} onCut={(i) => actions.submit(0, i)} />;
+    module = <Cables challenge={challenge} cut={mine.progress.cut} solved={mine.solved[0]} errorAt={errorAt} onCut={(i) => actions.submit(0, i)} />;
   } else if (challenge.type === 'simon') {
     module = (
       <Simon
