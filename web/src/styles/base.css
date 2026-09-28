@@ -1,0 +1,112 @@
+/* Base y utilidades compartidas.
+   Los shaders del Figma (degradado con tramado, LCD de fósforo, bloom) se
+   aproximan con CSS: los shaders necesitan WebGPU + HTML-in-Canvas, que los
+   navegadores de móvil todavía no soportan. */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #3b3b33;
+  color: var(--titulo);
+  font-family: var(--f-titulo);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
+  overscroll-behavior: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+button:focus-visible {
+  outline: 3px solid var(--team);
+  outline-offset: 3px;
+}
+
+/* ------------------------------------------------------------------------
+   Degradados con tramado (aprox. del shader «Degradado ditherrr»)
+   ------------------------------------------------------------------------ */
+
+.dither {
+  --dither-a: #58584b;
+  --dither-b: #3b3b33;
+  --dither-cell: 3px;
+  background-color: var(--dither-b);
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' shape-rendering='crispEdges'%3E%3Crect width='1' height='1' fill='%23000' fill-opacity='.09'/%3E%3Crect x='2' y='2' width='1' height='1' fill='%23000' fill-opacity='.09'/%3E%3Crect x='2' width='1' height='1' fill='%23fff' fill-opacity='.04'/%3E%3C/svg%3E"),
+    linear-gradient(var(--dither-a), var(--dither-b));
+  background-size: calc(var(--dither-cell) * 4) calc(var(--dither-cell) * 4), 100% 100%;
+  image-rendering: pixelated;
+}
+
+.dither-carcasa {
+  --dither-a: #878aa2;
+  --dither-b: #71738c;
+}
+
+.dither-bronce {
+  --dither-a: #c8b474;
+  --dither-b: #a68d57;
+}
+
+.dither-cavidad {
+  --dither-a: #24232f;
+  --dither-b: #35354b;
+}
+
+.dither-panel {
+  --dither-a: #42435b;
+  --dither-b: #323346;
+}
+
+/* ------------------------------------------------------------------------
+   Texto
+   ------------------------------------------------------------------------ */
+
+.label {
+  font-family: var(--f-etiqueta);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

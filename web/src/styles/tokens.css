@@ -1,0 +1,75 @@
+/* Tokens de la hoja de estilo del Figma («Rediseñooo v1 · Pixel device»). */
+
+:root {
+  /* Paleta */
+  --oliva: #4d4d41;
+  --carcasa: #7d7f98;
+  --carcasa-luz: #aaafc2;
+  --carcasa-sombra: #62647c;
+  --contorno: #2f3042;
+  --cavidad: #2d2c3c;
+  --lcd: #23242f;
+  --lcd-texto: #eaf4ff;
+  --lcd-apagado: #6a6d88;
+  --lcd-valor: #8fa3bf;
+  --lcd-separador: #34364a;
+  --tecla: #d4dee8;
+  --tecla-sombra: #9da2b5;
+  --bronce: #bca766;
+  --bronce-luz: #dcc687;
+  --bronce-sombra: #8e6a3f;
+  --panel: #3a3b50;
+  --panel-luz: #4c4e68;
+  --panel-sombra: #23243a;
+  --boton-apagado: #5a5c72;
+  --boton-apagado-texto: #9a9db2;
+  --boton-apagado-sombra: #4a4c60;
+
+  --cian: #22d3ee;
+  --magenta: #f0499c;
+  --ok: #3afb0a;
+  --warn: #ffc43d;
+  --danger: #ff4d4d;
+
+  /* Texto sobre el fondo oliva */
+  --titulo: #eef0f4;
+  --cuerpo: #d2d3c0;
+  --etiqueta: #9c9d88;
+  --etiqueta-carcasa: #aaafc2;
+
+  /* Simon */
+  --simon-rojo: #ef4444;
+  --simon-rojo-sombra: #a82e2e;
+  --simon-verde: #22c55e;
+  --simon-verde-sombra: #178a42;
+  --simon-azul: #3b82f6;
+  --simon-azul-sombra: #2a5db0;
+  --simon-amarillo: #eab308;
+  --simon-amarillo-sombra: #a67f05;
+  --simon-tinta: #14141c;
+
+  /* Tipografías */
+  --f-titulo: 'Pixelify Sans', system-ui, sans-serif;
+  --f-etiqueta: 'Silkscreen', monospace;
+  --f-lcd: 'VT323', monospace;
+
+  /* Efectos recurrentes */
+  --bisel-carcasa: inset 0 -5px 0 var(--carcasa-sombra), inset 0 4px 0 var(--carcasa-luz);
+  --hundido: inset 0 5px 0 rgba(21, 21, 30, 0.9);
+  --sombra-dura: 0 6px 0 var(--contorno);
+
+  /* Identidad de bando (se sobreescribe con [data-team]) */
+  --team: var(--cian);
+  --team-sombra: #1597ab;
+  --team-tinta: #0b1e24;
+  --team-apagado: #1b5561;
+  --team-glow: rgba(34, 211, 238, 0.45);
+}
+
+[data-team='magenta'] {
+  --team: var(--magenta);
+  --team-sombra: #b0306f;
+  --team-tinta: #2a0716;
+  --team-apagado: #5c1f3d;
+  --team-glow: rgba(240, 73, 156, 0.45);
+}

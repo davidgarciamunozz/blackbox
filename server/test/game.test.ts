@@ -41,6 +41,7 @@ function startMatch(t: ReturnType<typeof setup>) {
   t.game.join('B', 'naranja');
   t.game.setReady('A', true);
   t.game.setReady('B', true);
+  t.advance(config.countdown * 1000);
 }
 
 // Soluciones de los primeros retos del equipo rojo en retos.json
@@ -164,7 +165,7 @@ describe('ronda', () => {
   });
 
   it('el reloj a cero es derrota', () => {
-    t.advance(121_000);
+    t.advance(120_000);
     expect(t.game.teams.rojo!.status).toBe('timeout');
     expect(t.game.phase).toBe('round_over');
     expect(t.game.lastRound!.winner).toBeNull();
@@ -187,6 +188,30 @@ describe('ronda', () => {
     const rojo = t.log.rounds.find((r) => r.team === 'rojo')!;
     expect(rojo).toMatchObject({ result: 'defused', errorsTotal: 1, attackOrder: 'cables>simon>candados' });
     expect(t.log.roundsCsv().split('\n')[0]).toContain('attackOrder');
+  });
+});
+
+describe('cuenta atrás', () => {
+  it('el reloj no corre ni se aceptan respuestas hasta que termina', () => {
+    const t = setup();
+    t.game.join('A', 'rojo');
+    t.game.join('B', 'naranja');
+    t.game.setReady('A', true);
+    t.game.setReady('B', true);
+    expect(t.last('match_start', 'rojo').countdown).toBe(3);
+    t.advance(2000);
+    expect(t.game.submit('A', 0, ROJO.cables.solution)).toBe('not_playing');
+    expect(t.game.timeLeft('rojo')).toBe(120);
+    t.advance(1000);
+    expect(t.game.submit('A', 0, ROJO.cables.solution)).toBeNull();
+  });
+
+  it('avisa al móvil cuando la entrega es incompleta', () => {
+    const t = setup();
+    startMatch(t);
+    t.game.submit('A', 0, ROJO.cables.solution);
+    t.game.deviceButton('rojo', 3);
+    expect(t.last('deliver_result', 'rojo')).toEqual({ type: 'deliver_result', accepted: false, solved: [true, false, false] });
   });
 });
 

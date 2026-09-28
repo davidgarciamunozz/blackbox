@@ -1,0 +1,185 @@
+/* ---- Franja persistente ---- */
+.franja {
+  flex: none;
+  height: 104px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 23px 3px;
+  gap: 12px;
+}
+
+.identity {
+  flex: none;
+  min-width: 80px;
+  padding-right: 9px;
+  height: 34px;
+  border-width: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-left: 9px;
+  font-family: var(--f-etiqueta);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--team);
+}
+
+.identity > * {
+  position: relative;
+  z-index: 1;
+}
+
+.clock {
+  flex: 1;
+  max-width: 170px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 62px;
+  line-height: 1;
+  padding-bottom: 4px;
+  transition: color 120ms;
+}
+
+.clockValue {
+  position: relative;
+  z-index: 1;
+}
+
+.clockWarn {
+  color: var(--warn);
+}
+
+.clockDanger {
+  color: var(--danger);
+}
+
+.delta {
+  position: absolute;
+  z-index: 1;
+  top: 3px;
+  right: 6px;
+  font-size: 20px;
+  line-height: 1;
+  animation: delta 1.4s ease-out forwards;
+}
+
+@keyframes delta {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  12% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+
+.clockFlash {
+  animation: clockFlash 0.5s steps(2, jump-none) 2;
+}
+
+@keyframes clockFlash {
+  50% {
+    background: #3a1418;
+  }
+}
+
+.modules {
+  flex: none;
+  width: 80px;
+  height: 34px;
+  border-width: 2px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 8px;
+}
+
+.modules > * {
+  z-index: 1;
+}
+
+/* ---- Placa de base ---- */
+.placa {
+  flex: none;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px 2px;
+  filter: drop-shadow(0 5px 0 var(--contorno));
+}
+
+.grill {
+  display: flex;
+  gap: 3px;
+}
+
+.grill span {
+  width: 3px;
+  height: 14px;
+  background: var(--contorno);
+}
+
+.serial {
+  font-family: var(--f-etiqueta);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--contorno);
+  text-transform: uppercase;
+}
+
+/* ---- Barra del modo sin hardware ---- */
+.fallback {
+  flex: none;
+  height: 88px;
+  padding: 7px 13px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.legend {
+  font-family: var(--f-etiqueta);
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  text-align: center;
+  color: var(--contorno);
+  text-transform: uppercase;
+}
+
+.fallbackRow {
+  display: flex;
+  gap: 10px;
+}
+
+.fallbackRow > button {
+  height: 42px;
+  flex: 1;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+
+.fallbackRow > .deliver {
+  flex: none;
+  width: 52px;
+}
+
+.deliverIcon {
+  width: 18px;
+  height: 18px;
+  border: 3px solid currentColor;
+  border-radius: 50%;
+}

@@ -1,6 +1,6 @@
 # Project Blackbox · Contrato de API
 
-Todos los mensajes son JSON de texto con un campo `type`. Un único servidor en el puerto **8080**:
+Los tipos exactos están en `shared/protocol.ts` (los usan servidor y app). Todos los mensajes son JSON de texto con un campo `type`. Un único servidor en el puerto **8080**:
 
 | Ruta | Quién | Protocolo |
 |---|---|---|
@@ -10,7 +10,7 @@ Todos los mensajes son JSON de texto con un campo `type`. Un único servidor en 
 | `GET /api/logs/rondas.csv` · `GET /api/logs/eventos.csv` | L.T | Registro de partida |
 | `GET /api/state` · `POST /api/reset` | Depuración | — |
 
-**Identificadores fijos:** equipos `"rojo"` y `"naranja"` (los usa el firmware). Módulos `0 = cables`, `1 = simon`, `2 = candados`, igual que los botones 0–2 de la caja. El botón `3` es la entrega. Las runas son números del `1` al `16`.
+**Identificadores fijos:** equipos `"rojo"` y `"naranja"` (los usa el firmware). En pantalla se muestran como **Cian** y **Magenta** (Figma); la correspondencia está en `web/src/teams.ts`. Módulos `0 = cables`, `1 = simon`, `2 = candados`, igual que los botones 0–2 de la caja. El botón `3` es la entrega. Las runas son números del `1` al `16`.
 
 **Regla de oro:** ni `solution` ni `revealRune` salen nunca del servidor.
 
@@ -33,11 +33,12 @@ Todos los mensajes son JSON de texto con un campo `type`. Un único servidor en 
 ```jsonc
 { "type": "state", "state": { ... } }   // snapshot completo: al conectar y en cada cambio de fase. El móvil pinta a partir de aquí.
 { "type": "lobby_state", "players": [{ "team", "taken", "connected", "ready" }], "allReady": false }
-{ "type": "match_start", "round": 1, "challenges": [cables, simon, candados], "timeLeft": 120, "active": 0 }
+{ "type": "match_start", "round": 1, "challenges": [cables, simon, candados], "timeLeft": 120, "active": 0, "countdown": 3 }  // el reloj arranca tras la cuenta atrás
 { "type": "timer", "timeLeft": 87 }
 { "type": "module_switch", "active": 1 }
 { "type": "answer_result", "module": 2, "correct": true, "penalty": 0, "timeLeft": 82,
-  "progress": { "simonTurn": 0, "padIndex": 1, "revealed": [7] }, "reveal": 7 }  // reveal solo en candados
+  "progress": { "simonTurn": 0, "padIndex": 1, "revealed": [7], "padValues": [4] }, "reveal": 7 }  // reveal solo en candados
+{ "type": "deliver_result", "accepted": false, "solved": [true, false, true] }  // entrega incompleta (pantalla «Entrega rechazada»)
 { "type": "module_solved", "module": 1, "bonus": 10, "timeLeft": 92 }
 { "type": "round_end", "team": "rojo", "result": "defused" | "timeout" | "beaten", "timeLeft": 14 }
 { "type": "round_summary", "round": 1, "winner": "rojo" | null, "results": [...], "score": { "rojo": 1, "naranja": 0 }, "sessionOver": false }
@@ -66,7 +67,7 @@ Retos que recibe el móvil (sin soluciones):
 
 ## Reglas del servidor (valores en `server/src/config.ts`)
 
-- 120 s iniciales por equipo, +10 s por módulo resuelto.
+- Cuenta atrás de 3 s antes de que arranque el reloj. 120 s iniciales por equipo, +10 s por módulo resuelto.
 - Penalización por error (1.º / 2.º / 3.º y siguientes errores del equipo en la ronda): cables 3/5/8, simon 4/6/10, candados 6/10/15 s. **Provisional, pendiente de P.L.**
 - Fallo en Simon: se repite el turno. Fallo en Candados: se queda en el mismo candado. Fallo en Cables: solo penaliza. **Provisional.**
 - Solo se aceptan respuestas al módulo activo. Se puede cambiar a un módulo ya resuelto.

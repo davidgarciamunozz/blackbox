@@ -1,10 +1,14 @@
 {
   "name": "blackbox",
   "private": true,
-  "workspaces": ["server"],
+  "workspaces": [
+    "server",
+    "web"
+  ],
   "scripts": {
-    "dev": "npm run dev -w server",
-    "test": "npm test -w server",
-    "start": "npm start -w server"
+    "dev": "npm run dev -w server & npm run dev -w web",
+    "build": "npm run build -w web",
+    "start": "npm start -w server",
+    "test": "npm test -w server"
   }
 }

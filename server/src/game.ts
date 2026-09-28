@@ -49,6 +49,7 @@ interface TeamRound {
   simonTurn: number;
   padIndex: number;
   revealed: (number | null)[];
+  padValues: number[];
   lastSentSecond: number;
 }
 
@@ -66,7 +67,7 @@ export class Game {
   score: Record<Team, number> = { rojo: 0, naranja: 0 };
   deviceConnected = false;
   teams: Partial<Record<Team, TeamRound>> = {};
-  roundStartedAt = 0;
+  roundStartedAt = 0; // momento en que arranca el reloj (tras la cuenta atrás)
   roundWinner: Team | null = null;
   lastRound: { winner: Team | null; results: RoundResult[] } | null = null;
 
@@ -168,7 +169,7 @@ export class Game {
 
   private startRound() {
     if (this.phase === 'session_over') this.newSession();
-    const now = this.clock.now();
+    const now = this.clock.now() + this.cfg.countdown * 1000;
     this.round += 1;
     this.phase = 'playing';
     this.roundStartedAt = now;
@@ -190,6 +191,7 @@ export class Game {
         simonTurn: 0,
         padIndex: 0,
         revealed: [],
+        padValues: [],
         lastSentSecond: this.cfg.startTime,
       };
     }
@@ -202,6 +204,7 @@ export class Game {
         challenges: tr.challenges.map(toPublic),
         timeLeft: this.cfg.startTime,
         active: 0,
+        countdown: this.cfg.countdown,
       });
     }
     this.pushIndicators();
@@ -230,7 +233,9 @@ export class Game {
     const tr = this.teams[team];
     if (!tr) return this.cfg.startTime;
     if (tr.status !== 'playing') return tr.frozenTimeLeft;
-    return Math.max(0, (tr.endsAt - this.clock.now()) / 1000);
+    // Durante la cuenta atrás el reloj está parado.
+    const now = Math.max(this.clock.now(), this.roundStartedAt);
+    return Math.max(0, (tr.endsAt - now) / 1000);
   }
 
   private secondsLeft(team: Team) {
@@ -255,8 +260,13 @@ export class Game {
     }
   }
 
+  startsIn(): number {
+    return Math.max(0, (this.roundStartedAt - this.clock.now()) / 1000);
+  }
+
+  // Equipo en juego y con el reloj ya corriendo. Nada se acepta durante la cuenta atrás.
   private playing(team: Team | null): TeamRound | null {
-    if (!team || this.phase !== 'playing') return null;
+    if (!team || this.phase !== 'playing' || this.startsIn() > 0) return null;
     const tr = this.teams[team];
     return tr && tr.status === 'playing' ? tr : null;
   }
@@ -300,6 +310,7 @@ export class Game {
     this.logEvent(team, 'switch', MODULES[module], '');
     this.bus.toTeam(team, { type: 'module_switch', active: module });
     this.pushIndicators();
+    this.bus.stateChanged();
   }
 
   private deliver(team: Team) {
@@ -308,8 +319,9 @@ export class Game {
     if (tr.solved.every(Boolean)) {
       this.endTeam(team, 'defused');
     } else {
-      // MVP: entrega incompleta no tiene efecto.
+      // MVP: entrega incompleta no tiene efecto en el juego; el móvil solo lo muestra.
       this.logEvent(team, 'deliver_incomplete', '', '');
+      this.bus.toTeam(team, { type: 'deliver_result', accepted: false, solved: [...tr.solved] as [boolean, boolean, boolean] });
     }
   }
 
@@ -371,6 +383,7 @@ export class Game {
       tr.lastSentSecond = this.secondsLeft(team);
       this.pushIndicators();
     }
+    this.bus.stateChanged();
     return null;
   }
 
@@ -409,10 +422,12 @@ export class Game {
       if (this.cfg.candadosErrorResets === 'module') {
         tr.padIndex = 0;
         tr.revealed = [];
+        tr.padValues = [];
       }
       return { correct: false, solved: false };
     }
     tr.revealed[tr.padIndex] = pad.revealRune;
+    tr.padValues[tr.padIndex] = value as number;
     tr.padIndex += 1;
     return { correct: true, solved: tr.padIndex >= c.pads.length, reveal: pad.revealRune };
   }
@@ -438,10 +453,11 @@ export class Game {
     });
     tr.lastSentSecond = this.secondsLeft(team);
     if (this.timeLeft(team) <= 0) this.endTeam(team, 'timeout');
+    this.bus.stateChanged();
   }
 
   private progress(tr: TeamRound): ProgressView {
-    return { simonTurn: tr.simonTurn, padIndex: tr.padIndex, revealed: [...tr.revealed] };
+    return { simonTurn: tr.simonTurn, padIndex: tr.padIndex, revealed: [...tr.revealed], padValues: [...tr.padValues] };
   }
 
   // =========================================================================
@@ -466,6 +482,7 @@ export class Game {
     }
 
     this.pushIndicators();
+    this.bus.stateChanged();
     // La llamada recursiva de 'beaten' ya puede haber cerrado la ronda.
     if (this.phase === 'playing' && TEAMS.every((t) => this.teams[t]!.status !== 'playing')) this.finishRound();
   }
@@ -501,6 +518,7 @@ export class Game {
     this.deviceConnected = connected;
     this.bus.toAll({ type: 'device_status', connected, screenControls: this.screenControlsEnabled() });
     if (connected) this.pushIndicators();
+    this.bus.stateChanged();
   }
 
   indicators(): Record<Team, LedState[]> {
@@ -539,10 +557,12 @@ export class Game {
       mine: showRound
         ? {
             status: tr.status,
+            startsIn: this.phase === 'playing' ? this.startsIn() : 0,
             timeLeft: this.secondsLeft(team),
             active: tr.active,
             solved: [...tr.solved] as [boolean, boolean, boolean],
             errors: tr.errors.length,
+            attackOrder: [...tr.attackOrder],
             challenges: tr.challenges.map(toPublic),
             progress: this.progress(tr),
           }

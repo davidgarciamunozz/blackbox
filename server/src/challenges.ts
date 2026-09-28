@@ -1,8 +1,6 @@
 import { readFileSync } from 'node:fs';
-import type { Team } from './config.js';
-
-export type CableColor = 'blanco' | 'negro' | 'rojo' | 'azul' | 'verde' | 'naranja' | 'amarillo';
-export type SimonColor = 'rojo' | 'azul' | 'amarillo' | 'verde';
+import type { CableColor, PublicChallenge, SimonColor, Team } from '../../shared/protocol.js';
+export type { CableColor, PublicChallenge, SimonColor };
 
 export interface CablesChallenge {
   id: string;
@@ -43,11 +41,6 @@ export function loadChallenges(path: string): ChallengeFile {
 // ---------------------------------------------------------------------------
 //  Lo que viaja al móvil. Nunca incluye soluciones ni runas por revelar.
 // ---------------------------------------------------------------------------
-
-export type PublicChallenge =
-  | { id: string; type: 'cables'; cables: CablesChallenge['cables'] }
-  | { id: string; type: 'simon'; turns: { leds: SimonColor[]; pattern: SimonColor[] }[] }
-  | { id: string; type: 'candados'; headerRune: number; pads: number };
 
 export function toPublic(c: Challenge): PublicChallenge {
   switch (c.type) {

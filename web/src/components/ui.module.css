@@ -1,0 +1,251 @@
+/* Pantalla completa sobre fondo oliva */
+.screen {
+  --dither-cell: 3px;
+  position: relative;
+  min-height: 100%;
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  padding: calc(14px + env(safe-area-inset-top)) 12px calc(20px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.35);
+}
+
+/* Carcasa metálica con bisel duro */
+.casing {
+  position: relative;
+  border: 3px solid var(--contorno);
+  border-radius: 8px;
+  filter: drop-shadow(0 6px 0 var(--contorno));
+}
+
+.casing::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  box-shadow: var(--bisel-carcasa);
+  pointer-events: none;
+}
+
+.bronze::after {
+  box-shadow: inset 0 -5px 0 var(--bronce-sombra), inset 0 4px 0 var(--bronce-luz);
+}
+
+.screw {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  display: block;
+  pointer-events: none;
+}
+
+/* Pantalla LCD hundida (aprox. del shader «LCD fosforooo») */
+.lcd {
+  position: relative;
+  overflow: hidden;
+  background: var(--lcd);
+  border: 3px solid var(--contorno);
+  border-radius: 4px;
+  color: var(--lcd-texto);
+  font-family: var(--f-lcd);
+}
+
+/* Reflejos diagonales */
+.lcd::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    125deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.06) 38%,
+    rgba(255, 255, 255, 0.06) 47%,
+    transparent 47%,
+    transparent 52%,
+    rgba(255, 255, 255, 0.06) 52%,
+    rgba(255, 255, 255, 0.06) 55%,
+    transparent 55%
+  );
+  pointer-events: none;
+}
+
+/* Rejilla de puntos + hundido superior */
+.lcd::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(to bottom, transparent 0 2px, rgba(0, 0, 0, 0.16) 2px 3px);
+  box-shadow: var(--hundido);
+  pointer-events: none;
+}
+
+.lcdThin::after {
+  box-shadow: inset 0 3px 0 rgba(21, 21, 30, 0.9);
+}
+
+.glow {
+  text-shadow: 0 0 10px currentColor, 0 0 2px currentColor;
+}
+
+/* Teclas */
+.key {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--contorno);
+  border-radius: 5px;
+  font-family: var(--f-etiqueta);
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: transform 60ms ease-out, filter 60ms ease-out;
+}
+
+.key::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.key:not(:disabled):active {
+  transform: translateY(3px);
+  filter: brightness(0.95);
+}
+
+.primary {
+  background: var(--team);
+  color: var(--team-tinta);
+  box-shadow: 0 4px 0 var(--contorno), 0 0 20px var(--team-glow);
+}
+
+.primary::after {
+  box-shadow: inset 0 -4px 0 var(--team-sombra), inset 0 2px 0 rgba(255, 255, 255, 0.55);
+}
+
+.secondary {
+  color: var(--contorno);
+  filter: drop-shadow(0 4px 0 var(--contorno));
+}
+
+.secondary::after {
+  box-shadow: inset 0 -4px 0 var(--carcasa-sombra), inset 0 2px 0 rgba(255, 255, 255, 0.55);
+}
+
+.off {
+  background: var(--boton-apagado);
+  color: var(--boton-apagado-texto);
+  filter: drop-shadow(0 4px 0 var(--contorno));
+}
+
+.off::after {
+  box-shadow: inset 0 -4px 0 var(--boton-apagado-sombra), inset 0 2px 0 rgba(255, 255, 255, 0.15);
+}
+
+.light {
+  background: var(--tecla);
+  color: var(--contorno);
+  filter: drop-shadow(0 4px 0 var(--contorno));
+}
+
+.light::after {
+  box-shadow: inset 0 -4px 0 var(--tecla-sombra), inset 0 2px 0 rgba(255, 255, 255, 0.55);
+}
+
+.big {
+  width: 100%;
+  height: 62px;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+}
+
+/* LED cuadrado */
+.led {
+  position: relative;
+  display: inline-block;
+  border: 2px solid var(--contorno);
+  border-radius: 2px;
+  flex: none;
+}
+
+.led::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  box-shadow: inset 0 2px 0 rgba(0, 0, 0, 0.3);
+}
+
+.ledOn::after {
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Runa: placeholder hasta que lleguen los SVG de I.C */
+.rune {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  background: var(--tecla);
+  border: 2px solid var(--contorno);
+  border-radius: 4px;
+  color: var(--contorno);
+  font-family: var(--f-titulo);
+  font-weight: 700;
+  overflow: hidden;
+}
+
+.runePlaceholder {
+  border-style: dashed;
+}
+
+.rune::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  box-shadow: inset 0 -4px 0 var(--tecla-sombra);
+  pointer-events: none;
+}
+
+.rune img {
+  width: 78%;
+  height: 78%;
+  object-fit: contain;
+}
+
+/* Textos de pantallas informativas */
+.eyebrow {
+  margin: 0;
+  font-family: var(--f-etiqueta);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-align: center;
+  color: var(--etiqueta);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--f-titulo);
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 1.15;
+  text-align: center;
+  color: var(--titulo);
+  text-shadow: 0 3px 0 var(--contorno);
+}
+
+.body {
+  margin: 0 auto;
+  max-width: 350px;
+  font-family: var(--f-titulo);
+  font-size: 17px;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--cuerpo);
+}

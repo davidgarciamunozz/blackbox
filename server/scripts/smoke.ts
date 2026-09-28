@@ -28,7 +28,7 @@ naranja.send({ type: 'join', team: 'naranja' });
 await wait(100);
 rojo.send({ type: 'ready' });
 naranja.send({ type: 'ready' });
-await wait(200);
+await wait(3300); // cuenta atrás
 
 const start = rojo.inbox.find((m) => m.type === 'match_start');
 if (!start) throw new Error('no llegó match_start');

@@ -1,17 +1,19 @@
 // Todo lo que depende de decisiones de diseño (pendientes de P.L) vive aquí,
 // para poder ajustarlo en los playtests sin tocar la lógica.
 
-export const TEAMS = ['rojo', 'naranja'] as const;
-export type Team = (typeof TEAMS)[number];
+import type { ModuleIndex, Team } from '../../shared/protocol.js';
+export type { ModuleIndex, Team };
+
+export const TEAMS: readonly Team[] = ['rojo', 'naranja'];
 
 // Índice de módulo = índice del botón de la caja (0, 1, 2).
 export const MODULES = ['cables', 'simon', 'candados'] as const;
 export type ModuleType = (typeof MODULES)[number];
-export type ModuleIndex = 0 | 1 | 2;
 
 export const config = {
   port: Number(process.env.PORT ?? 8080),
 
+  countdown: 3, // cuenta atrás 3-2-1 antes de que arranque el reloj
   startTime: 120, // segundos por equipo al empezar la ronda
   solveBonus: 10, // segundos por módulo resuelto
 
