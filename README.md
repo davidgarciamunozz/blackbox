@@ -1,5 +1,7 @@
 # Project Blackbox · software
 
+**En producción:** https://blackbox-gnry.onrender.com · panel: `/admin?token=…`
+
 Servidor del juego + app web para los móviles de los Artificieros. La caja ESP32 (firmware de P.L) se conecta al mismo servidor.
 
 ```
@@ -50,7 +52,7 @@ En la sección 1 del `.ino`:
 
 ```cpp
 #define MODO_PRUEBA false
-const char*    WS_HOST    = "blackbox-xxxx.onrender.com";  // sin https:// ni barra final
+const char*    WS_HOST    = "blackbox-gnry.onrender.com";  // sin https:// ni barra final
 const uint16_t WS_PORT    = 443;
 const char*    WS_PATH    = "/device";
 const bool     WS_USE_SSL = true;
