@@ -15,6 +15,7 @@ import { ChallengePicker, challengesPath, loadChallenges } from './challenges.js
 import { Game, type Bus } from './game.js';
 import { MatchLog } from './log.js';
 import type { ClientMessage, DeviceMessage, ServerMessage, ToDeviceMessage } from './protocol.js';
+import { ADMIN_PAGE } from './admin.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const DATA_DIR = join(here, '../data');
@@ -48,7 +49,8 @@ const bus: Bus = {
   },
 };
 
-const challenges = loadChallenges(challengesPath(DATA_DIR));
+const retosFile = challengesPath(DATA_DIR);
+const challenges = loadChallenges(retosFile);
 const game = new Game(config, new ChallengePicker(challenges), bus, undefined, log);
 setInterval(() => game.tick(), 100);
 
@@ -155,8 +157,36 @@ function serveStatic(req: IncomingMessage, res: ServerResponse) {
   res.end(readFileSync(file));
 }
 
+// En internet, las acciones de administración piden ADMIN_TOKEN (?token=… o cabecera x-admin-token).
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN ?? '';
+
+function isAdmin(req: IncomingMessage, url: URL) {
+  if (!ADMIN_TOKEN) return true;
+  return url.searchParams.get('token') === ADMIN_TOKEN || req.headers['x-admin-token'] === ADMIN_TOKEN;
+}
+
 const server = createServer((req, res) => {
-  const path = (req.url ?? '/').split('?')[0];
+  const url = new URL(req.url ?? '/', 'http://x');
+  const path = url.pathname;
+
+  if (path === '/api/health') {
+    res.writeHead(200, { 'content-type': 'text/plain' });
+    return res.end('ok');
+  }
+  if (path === '/admin') {
+    res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
+    return res.end(ADMIN_PAGE);
+  }
+  if (path.startsWith('/api/') && path !== '/api/state' && !isAdmin(req, url)) {
+    res.writeHead(401, { 'content-type': 'text/plain; charset=utf-8' });
+    return res.end('Falta el token de administración');
+  }
+  if (path === '/api/screen-controls') {
+    const mode = url.searchParams.get('mode');
+    if (req.method === 'POST' && (mode === 'auto' || mode === 'off' || mode === 'always')) game.setScreenControls(mode);
+    res.writeHead(200, { 'content-type': 'application/json' });
+    return res.end(JSON.stringify({ mode: config.screenControls, active: game.screenControlsEnabled() }));
+  }
   if (path === '/api/logs/rondas.csv' || path === '/api/logs/eventos.csv') {
     const body = path.endsWith('rondas.csv') ? log.roundsCsv() : log.eventsCsv();
     res.writeHead(200, {
@@ -167,7 +197,9 @@ const server = createServer((req, res) => {
   }
   if (path === '/api/state') {
     res.writeHead(200, { 'content-type': 'application/json' });
-    return res.end(JSON.stringify({ ...game.snapshot(null), indicators: game.indicators() }, null, 2));
+    return res.end(
+      JSON.stringify({ ...game.snapshot(null), screenControlsMode: config.screenControls, indicators: game.indicators() }, null, 2),
+    );
   }
   if (path === '/api/reset' && req.method === 'POST') {
     game.resetSession();
@@ -231,4 +263,6 @@ server.listen(config.port, () => {
   console.log(`  Puerto ${config.port}`);
   for (const ip of ips) console.log(`  App:  http://${ip}:${config.port}   ·  Caja (WS_HOST): ${ip}`);
   console.log(`  Registro: ${join(DATA_DIR, 'logs', stamp)}`);
+  console.log(`  Retos: ${retosFile}`);
+  console.log(`  Modo sin hardware: ${config.screenControls}${ADMIN_TOKEN ? ' · admin con token' : ''}`);
 });

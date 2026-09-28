@@ -10,5 +10,8 @@
     "build": "npm run build -w web",
     "start": "npm start -w server",
     "test": "npm test -w server"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

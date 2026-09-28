@@ -10,6 +10,12 @@ export const TEAMS: readonly Team[] = ['rojo', 'naranja'];
 export const MODULES = ['cables', 'simon', 'candados'] as const;
 export type ModuleType = (typeof MODULES)[number];
 
+export type ScreenControlsMode = 'auto' | 'off' | 'always';
+
+function parseScreenControls(v: string | undefined): ScreenControlsMode {
+  return v === 'off' || v === 'always' ? v : 'auto';
+}
+
 export const config = {
   port: Number(process.env.PORT ?? 8080),
 
@@ -35,9 +41,12 @@ export const config = {
   // LEDs en el lobby: 0 apagados, 1 fijos (P.L: encendidos).
   lobbyLeds: 1 as 0 | 1,
 
-  // Si true, el móvil puede cambiar de módulo y entregar aunque la caja esté conectada.
-  // Si false, solo cuando la caja está desconectada (modo sin hardware).
-  screenControlsAlways: process.env.SCREEN_CONTROLS === '1',
+  // Botones de módulo y entrega en la pantalla del móvil (modo sin hardware):
+  //   auto    → solo mientras la caja está desconectada
+  //   off     → nunca (la caja manda siempre; evita que caja y pantalla se pisen)
+  //   always  → siempre (probar sin caja)
+  // Se puede cambiar en caliente con POST /api/screen-controls?mode=off
+  screenControls: parseScreenControls(process.env.SCREEN_CONTROLS),
 };
 
 export type Config = typeof config;

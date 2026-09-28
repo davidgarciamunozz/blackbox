@@ -1,0 +1,21 @@
+# Despliegue en Render (https://render.com) · Blueprint
+# Un solo servicio: sirve la app web, /ws (móviles) y /device (caja ESP32).
+services:
+  - type: web
+    name: blackbox
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      # auto | off | always  (se puede cambiar luego desde /admin sin redesplegar)
+      - key: SCREEN_CONTROLS
+        value: auto
+      # Protege /admin y /api/*. Render genera un valor aleatorio: está en Environment.
+      - key: ADMIN_TOKEN
+        generateValue: true

@@ -188,6 +188,17 @@ describe('ronda', () => {
     expect(t.game.teams.rojo!.active).toBe(1);
   });
 
+  it('con el modo sin hardware apagado, la pantalla nunca controla aunque no haya caja', () => {
+    t.game.setScreenControls('off');
+    t.game.screenSwitch('A', 1);
+    expect(t.game.teams.rojo!.active).toBe(0);
+    expect(t.game.snapshot('A').screenControls).toBe(false);
+    t.game.setScreenControls('always');
+    t.game.setDeviceConnected(true);
+    t.game.screenSwitch('A', 2);
+    expect(t.game.teams.rojo!.active).toBe(2);
+  });
+
   it('registra la ronda en el CSV', () => {
     t.advance(2000);
     t.game.submit('A', 0, ROJO.cables.solution === 0 ? 1 : 0);

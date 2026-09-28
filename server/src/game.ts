@@ -1,7 +1,7 @@
 // Máquina de estados del juego. No sabe nada de red: recibe eventos y
 // emite mensajes a través de un Bus. Única fuente de verdad.
 
-import { MODULES, TEAMS, type Config, type ModuleIndex, type ModuleType, type Team } from './config.js';
+import { MODULES, TEAMS, type Config, type ModuleIndex, type ModuleType, type ScreenControlsMode, type Team } from './config.js';
 import { ChallengePicker, toPublic, type ChallengeSet, type SimonColor } from './challenges.js';
 import type {
   LedState,
@@ -284,7 +284,14 @@ export class Game {
   }
 
   screenControlsEnabled() {
-    return this.cfg.screenControlsAlways || !this.deviceConnected;
+    const mode = this.cfg.screenControls;
+    return mode === 'always' || (mode === 'auto' && !this.deviceConnected);
+  }
+
+  setScreenControls(mode: ScreenControlsMode) {
+    this.cfg.screenControls = mode;
+    this.bus.toAll({ type: 'device_status', connected: this.deviceConnected, screenControls: this.screenControlsEnabled() });
+    this.bus.stateChanged();
   }
 
   screenSwitch(clientId: string, module: ModuleIndex) {

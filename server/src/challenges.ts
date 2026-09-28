@@ -42,8 +42,9 @@ export function loadChallenges(path: string): ChallengeFile {
 // Los retos reales (con soluciones) no están en el repo: se copian a data/retos.json.
 // Sin ellos se usan los de ejemplo, que sirven para desarrollar pero no coinciden con el manual.
 export function challengesPath(dataDir: string): string {
-  const real = join(dataDir, 'retos.json');
-  if (existsSync(real)) return real;
+  // En Render, retos.json se sube como «Secret File» y aparece en /etc/secrets.
+  const candidates = [process.env.RETOS_PATH, join(dataDir, 'retos.json'), '/etc/secrets/retos.json'];
+  for (const c of candidates) if (c && existsSync(c)) return c;
   console.warn('⚠ No existe data/retos.json: usando retos.ejemplo.json (no coinciden con el manual).');
   return join(dataDir, 'retos.ejemplo.json');
 }
